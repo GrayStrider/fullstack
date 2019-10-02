@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { History, Location } from 'history'
 import { View } from 'react-native'
 import styled from 'styled-components'
 // import logo from '../../assets/images/logo-full.svg'
@@ -46,29 +47,36 @@ export const FormRowWrapper = styled(View)`
   justify-content: space-around;
 `
 
-const Login = (props: any) => {
-  const isLandlord = useIsLandlord(props.location)
+interface Props {
+  history: History
+  location: Location
+}
+
+const Login: React.FC<Props> = ({ history, location }) => {
+  const isLandlord = useIsLandlord(location)
   const path = isLandlord
-    ? props.location.pathname.substring('/landlord'.length)
-    : props.location.pathname
+    ? location.pathname.substring('/landlord'.length)
+    : location.pathname
   const { logIn, signUp } = useUserContext()
+  const activeTab = path === Tabs.login ? Tabs.login : Tabs.signup
+  
   return (
     <Wrapper>
       <LogoWrapper>{/* <Logo source={{ uri: logo }} /> */}</LogoWrapper>
       <View style={{ width: 600, height: 500 }}>
-        <TabBox activeTab={path} isLandlord={isLandlord}>
+        <TabBox activeTab={activeTab} isLandlord={isLandlord}>
           {path === Tabs.login ? (
             <LoginForm
               onSubmit={async (email, password) => {
                 await logIn(email, password, isLandlord)
-                props.history.push('/')
+                history.push('/')
               }}
             />
           ) : (
             <SignupForm
               onSubmit={async args => {
                 await signUp({ ...args, isLandlord })
-                props.history.push('/')
+                history.push('/')
               }}
             />
           )}
