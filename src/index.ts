@@ -7,8 +7,9 @@ import { PORT, MONGO_HOST, DB_NAME } from './modules/common/consts'
 import UserResolver from './modules/user/UserResolver'
 import { authChecker } from './modules/user/authChecker'
 import { setUpAccounts } from './modules/user/accounts'
-import { TypegooseMiddleware } from './middleware/typegoose'
-;(async () => {
+import { TypegooseMiddleware } from './middleware/typegoose';
+
+(async () => {
   const mongooseConnection = await connect(
     `mongodb://${MONGO_HOST || 'localhost'}:27017/${DB_NAME}`,
     { useNewUrlParser: true }
